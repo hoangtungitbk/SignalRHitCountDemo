@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div>
+        <label>Your Name: </label>
+        <input type="text" id="name" value=" " />
+        <br />
+        <label>Message: </label>
+        <input type="text" id="content" value=" " />
+        <button id="submit">Send</button>
+        <ul id="chatHistory"></ul>
+    </div>
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script>
+        $(function () {
+            var con = $.hubConnection();
+            var hub = con.createHubProxy('chatHub'); //class name
+
+            //process on client size
+            hub.on('recievedMessage', function (user, msg) {
+                var content = '<li>' + user + ': ' + msg + '</li>';
+                $('#chatHistory').append(content);
+            })
+
+            //client call to hub method
+            $('#submit').click(function () {
+                var user = $('#name').val();
+                var msg = $('#content').val();
+                hub.invoke('chatRoom', user, msg); //hub method name and passing values
+            });
+
+            con.start();
+        })
+    </script>
+</body>
+</html>

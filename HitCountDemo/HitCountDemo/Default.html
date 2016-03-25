@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="hitCount" style="font-size:72pt;"></div>
+    
+    <!--Jquery library must be included before signalR-->
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script>
+        $(function () {
+            var conn = $.hubConnection();
+            //the hub class name in camel notation. But .Net class name will be Pascal
+            //var hub = conn.createHubProxy('hitCountHub');            
+
+            var hub = conn.createHubProxy('HitCount');
+            hub.on('hitReceived', function (count) {
+                //hitReceived : the dynamic expression method name was defined in hub server
+                //count : parameter of the method
+                //this method implement how to handle the result on client size
+                $('#hitCount').text(count);
+            });
+            conn.start();
+
+            //conn.start(function () {
+            //    hub.invoke('someMethod');
+            //});
+            
+        });
+    </script>
+</body>
+</html>
