@@ -10,9 +10,9 @@ namespace HitCountDemo.Hubs
     {
         public void ChatRoom(string user, string msg)
         {
-            //Clients.All.recievedMessage(user, msg);
+            Clients.All.recievedMessage(user, msg);
             //Clients.Caller.recievedMessage(user, msg);
-            Clients.Others.recievedMessage(user, msg);
+            //Clients.Others.recievedMessage(user, msg);
         }
     }
 }

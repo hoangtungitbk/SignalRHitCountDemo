@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <form>
+        <table>
+            <tr>
+                <td>Id</td>
+                <td><input type="text" id="productId" /></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" id="productName" /></td>
+            </tr>
+            <tr>
+                <td>Price</td>
+                <td><input type="text" id="productPrice" /></td>
+            </tr>
+            <tr>
+                <td><button id="btnSave">Save</button></td>
+            </tr>
+        </table>
+    </form>
+
+    <table id="productlist" cellpadding="10" border="1">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </table>
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <!--<script src="Scripts/app.js"></script>-->
+    <script>
+        $(function () {
+            var conn = $.hubConnection();
+            var hub = conn.createHubProxy('productHub');
+
+            hub.getAll = function (data) {
+                if (data !== undefined && data.length) {
+                    var str = '';
+                    if (data.length == 0) {
+                        str += '<tr><td colspan="4">Không có dữ liệu</td></tr>';
+                    } else {
+                        $.each(data, function (index, item) {
+                            str += '<tr><td>' + item.Id + '</td><td>' + item.Name + '</td><td>' + item.Price + '</td></tr>';
+                        });
+                        $('#productlist').append(str);
+                    }
+                }
+            }
+
+
+
+            $.connection.hub.start().done(function () {
+                hub.getAll();
+                $('#btnSave').click(function () {
+                    var data = {
+                        Id: $("#productId").val(),
+                        Name: $("#productName").val(),
+                        Price: $("#productPrice").val()
+                    }
+                    hub.invoke('addProduct', data);
+                    $("#productId, #productName, #productPrice").val("");
+                    $("#productId").focus();
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
