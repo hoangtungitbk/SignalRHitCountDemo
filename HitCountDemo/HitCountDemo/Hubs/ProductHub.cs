@@ -23,6 +23,7 @@ namespace HitCountDemo.Hubs
         {
             ProductRepository.AddProduct(prod);
             Clients.Others.getAll(ProductRepository.GetAllProduct());
+            Clients.Caller.success(prod);
         }
     }
 }

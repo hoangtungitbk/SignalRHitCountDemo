@@ -22,6 +22,7 @@
         display(data);
     });
     $('#btnSave').click(function () {
+        event.preventDefault();
         var data = {
             Id: $("#productId").val(),
             Name: $("#productName").val(),

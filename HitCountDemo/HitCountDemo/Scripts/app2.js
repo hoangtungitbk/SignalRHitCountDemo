@@ -23,7 +23,12 @@
         display(data);
     });
 
+    hub.on('success', function (product) {
+        $('#status').text(product.Name + ' is addedd successfully');
+    });
+
     $('#btnSave').click(function () {
+        event.preventDefault();
         var data = {
             Id: $("#productId").val(),
             Name: $("#productName").val(),
